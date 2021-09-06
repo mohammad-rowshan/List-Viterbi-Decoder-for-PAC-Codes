@@ -1,4 +1,4 @@
-# List-Viterbi-Decoder-for-PAC-Codes
+# List Viterbi Decoder for PAC Codes
 If you find this algorithm useful, please cite the following paper. Thanks.
 
 M. Rowshan and E. Viterbo, "List Viterbi Decoding of PAC Codes," in IEEE Transactions on Vehicular Technology, vol. 70, no. 3, pp. 2428-2435, March 2021, doi: 10.1109/TVT.2021.3059370.
