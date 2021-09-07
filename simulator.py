@@ -1,25 +1,21 @@
 from time import time
-import polar_coding_functions as pcf
 from polar_code import PolarCode
 from channel import channel
-#from crclib import crc
-#from rate_profile import rateprofile
-#import csv
+import functions as pcf
 import numpy as np
 
-
-N = 2**7
-R = 0.5
-K = int(N*R)
-dsnr = 3.5
-#rate profile:
+N = 2**7  # Block length
+R = 0.5  # Code rate
+K = int(N*R)  # info bits
+# Rate profile:
 construct = "rm" #"rm": Reed-Muller Polar, #"dega": Density Evolution with Gaussian Approximation
+dsnr = 3.5  # Design SNR for DEGA
+# Coefficients of the convoutional generator polynomial
+conv_gen = [1,1,1] #[1,1,1,0,1,1,0,1,1] #[1,1,1,0,1,1] #,1,0,1] #[1,0,1,1,0,1,1] #[1,1,1,1,1,1,1]#0o177 [1,1,1,1,0]#:0o36 [1,1,0,1,1,1,0,0,1,1]#:0o1563 #[1,0,1,1,0,1,1]:0o133 ##[1,0]# by convention: c_0=1, c_m=1
+m = len(conv_gen)-1 # Memory size = constraint_length-1 # Do not change it
 
-conv_gen = [1,1,1] #[1,1,1,0,1,1,0,1,1] #[1,1,1,0,1,1] #,1,0,1] #[1,0,1,1,0,1,1] #[1,1,1,1,1,1,1]#0o177 [1,1,1,1,0]#:0o36 [1,1,0,1,1,1,0,0,1,1]#:0o1563 #[1,0,1,1,0,1,1]:0o133 ##[1,0]# by convention: c_0=1, c_m=1 ,,,
-m = len(conv_gen)-1
-
-S = 2**3     # local list size
-list_size = 2**m * S  # Total list size # Do not change it
+S = 2**3     # local list size #2**0=1 is equivalent to Viterbi Algortithm
+list_size = 2**m * S  # Total # paths # Do not change it
 
 pcode = PolarCode(N, K, construct, dsnr, L=list_size)
 
@@ -27,17 +23,17 @@ pcode.path_select = S #For list Viterbi Alg.
 pcode.num_paths = list_size
 
 pcode.iterations = 10**7
-err_cnt = 3  # Total number of error to count at each SNR
-# Alternatively, consider a fixed number of iterations, e.g., at each SNR. You need to change the 
+err_cnt = 9  # Total number of error to count at each SNR # Default: 49
+# Alternatively, consider a fixed number of iterations, e.g., at each SNR. You need to change the code, specifically line 85
+pcode.snrb_snr = 'SNRb' # 'SNRb':Eb/N0, 'SNR':Es/N0
+snr_range = np.arange(1,1.5,0.5)#arange(start,endpoint+step,step )
 
-pcode.modu = 'BPSK'
-pcode.snrb_snr = 'SNRb' # 'SNRb' 'SNR'
 pcode.m = m
 pcode.gen = conv_gen
-snr_range = pcf.np.arange(1,2,0.5)#arange(start,endpoint+step,step )
-print("PAC({0},{1}) constructed by {2}({3}dB), conv_gen={4}".format(N, K,construct,dsnr,conv_gen))
-print("LVA, Local list Size(S)={}, Total list size(L)={}".format(S,list_size))
+pcode.modu = 'BPSK'
 
+print("PAC({0},{1}) constructed by {2}({3}dB), conv_gen={4}".format(N, K,construct,dsnr,conv_gen))
+print("LVA, Local list Size(S)={}, Total # paths={}".format(S,list_size))
 print("BER & FER evaluation is started")
 
 st = time()
