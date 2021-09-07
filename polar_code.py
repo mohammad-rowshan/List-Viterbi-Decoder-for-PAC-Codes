@@ -1,5 +1,5 @@
-import polar_coding_exceptions as pcexc
-import polar_coding_functions as pcfun
+import exceptions as pcexc
+import functions as pcfun
 import copy
 import numpy as np
 import csv
