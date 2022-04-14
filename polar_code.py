@@ -1,3 +1,15 @@
+# CRC8/12/16 Class ####################################################################
+#
+# Copyright (c) 2021, Mohammad Rowshan
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without modification, 
+# are permitted provided that:
+# the source code retains the above copyright notice, and te redistribtuion condition.
+# 
+# Freely distributed for educational and research purposes
+#######################################################################################
+
 import exceptions as pcexc
 import functions as pcfun
 import copy
